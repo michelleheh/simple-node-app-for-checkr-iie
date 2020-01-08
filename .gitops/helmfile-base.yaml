@@ -1,0 +1,21 @@
+environments:
+  default:
+    values:
+    - microservice:
+        mode: staging
+
+releases:
+- name: {{ requiredEnv "DEPLOY_NAMESPACE" }}-michelle-node-app
+  namespace: {{ requiredEnv "DEPLOY_NAMESPACE" }}
+  chart: ./helm/michelle-node-service
+  values:
+  - microservice:
+      mode: {{ .Values.microservice.mode }}
+    # Recommended place to put DB migrations or init in IIE
+    jobs:
+      db-migrate:
+        args: ["rake", "db:migrate"]
+        # Helm hook type -- This defines when the job is run. For all types, see:
+        # https://helm.sh/docs/developing_charts/#the-available-hooks
+        type: pre-upgrade
+

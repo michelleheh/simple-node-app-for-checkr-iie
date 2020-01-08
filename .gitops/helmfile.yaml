@@ -1,0 +1,12 @@
+environments:
+  default:
+    values:
+    - microservice:
+        mode: staging
+
+helmfiles:
+- path: helmfile-base.yaml
+  values:
+  - microservice:
+      mode: {{ .Values.microservice.mode }}
+
